@@ -1,0 +1,50 @@
+services:
+#  order_processor_postgres:
+#    image: postgres:17
+#    container_name: order_processor_postgres
+#    restart: unless-stopped # Faz o container subir sozinho se o PC reiniciar
+#    ports:
+#      - "5432:5432"
+#    environment:
+#      TZ: America/Sao_Paulo
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: local123
+#      POSTGRES_DB: order_processor
+#    volumes:
+#      - postgres_volume:/var/lib/postgresql/data
+#    networks:
+#      - order_processor_network
+
+  order_processor_mongodb:
+    image: mongo:8.0
+    container_name: order_processor_mongodb
+    restart: unless-stopped # Faz o container subir sozinho se o PC reiniciar
+    ports:
+      - "27017:27017"
+    environment:
+      TZ: America/Sao_Paulo
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: local123
+      MONGO_INITDB_DATABASE: order_processor
+    volumes:
+      - mongodb-volume:/data/db
+    networks:
+      - order_processor_network
+
+  order_processor_rabbitmq:
+    image: rabbitmq:3.13-management
+    ports:
+      - 15672:15672
+      - 5672:5672
+
+volumes:
+#  postgres_volume:
+#    name: postgres_volume
+#    driver: local
+  mongodb-volume:
+    name: mongodb-volume
+    driver: local
+
+networks:
+  order_processor_network:
+    name: order_processor_network
